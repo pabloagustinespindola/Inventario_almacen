@@ -1,0 +1,81 @@
+productos = {}
+
+while True:
+    print("\n    --- MENÚ ---")
+    print("\n1) Agregar producto")
+    print("2) Consultar precio")
+    print("3) Consultar stock")
+    print("4) Eliminar producto")
+    print("5) Mostrar productos")
+    print("6) Salir")
+    
+    opcion = int(input("Ingrese una opción: "))
+    
+    if opcion == 1:
+        respuesta = "si"
+        while respuesta == "si":
+            producto = {}
+            nombre = input("Ingrese el nombre del producto: ")
+            producto["Nombre"] = nombre
+
+            precio = float(input("Ingrese el precio: $"))
+            while precio < 1:
+                precio = int(input("Ingrese un número mayor a 0: "))
+            producto["Precio"] = precio
+
+            cantidad = int(input("Ingrese la cantidad en stock: "))
+            while cantidad < 1:
+                cantidad = int(input("Ingrese un número mayor a 0: "))
+            producto["Cantidad"] = cantidad
+
+            codigo = input("Ingrese el código del producto: ")
+            while codigo < 1:
+                codigo = int(input("Ingrese un número mayor a 0: "))
+            codigo = "P" + codigo
+            productos[codigo] = producto
+            respuesta = input("¿Desea agregar otro producto? (si/no): ")
+
+    elif opcion == 2:
+        codigo = input("Ingrese el código del producto: ")
+        codigo = "P" + codigo
+        precio = productos[codigo].get("Precio")
+        nombre = productos[codigo].get("Nombre")
+        if precio == None:
+            print("No se encuentra el producto")
+        else:
+            print(f"El producto {nombre} cuesta ${precio}")
+
+    elif opcion == 3:
+        codigo = input("Ingrese el código del producto: ")
+        codigo = "P" + codigo
+        cantidad = productos[codigo].get("Cantidad")
+        nombre = productos[codigo].get("Nombre")
+        if cantidad == None:
+            print("No se encuentra el producto")
+        else:
+            print(f"El producto {nombre} tiene un stock de {cantidad}")
+
+    elif opcion == 4:
+        eliminar = input("Ingrese el código del producto a eliminar: ")
+        eliminar = "P" + eliminar
+        if eliminar in productos:
+            nombre = productos[codigo].get("Nombre")
+            del productos[eliminar]
+            print(f"El producto {nombre} fue eliminado")
+        else:
+            print("El producto no se encuentra en el inventario")
+
+    elif opcion == 5:
+        if len(productos) > 0:
+            for producto in productos.values():
+                for llave, valor in producto.items():
+                    print(f"{llave}: {valor}")
+        else:
+            print("No hay productos en el inventario")
+
+    elif opcion == 6:
+        print("Saliendo...")
+        break
+
+    else:
+        print("Ingrese una opción válida (1-6)")
