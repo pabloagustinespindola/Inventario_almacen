@@ -1,0 +1,124 @@
+# Funciones y diccionarios
+
+def menu():
+    print("\n--------- MENÚ --------")
+    print("\n1. Registrar producto")
+    print("2. Mostrar productos")
+    print("3. Actualizar producto")
+    print("4. Eliminar producto")
+    print("5. Buscar producto")
+    print("6. Registro de bajo stock")
+    print("7. Salir")
+    print("-------------------------")
+
+def es_positivo(numero):# Comprueba si el numero ingresado es positivo
+    if numero < 0:
+        return False
+    else:
+        return True
+
+def registrar_producto(inventario, codigo):
+    producto = {} # Clave codigo | Valor = producto{}
+    
+    #Ingreso de datos
+    nombre = input("Ingrese el nombre: ")
+    descripcion = input("Ingrese una descripción: ")
+    cantidad = int(input("Ingrese la cantidad: "))
+    while not es_positivo(cantidad): #Comprobación de ingreso negativo
+        cantidad = int(input("Ingrese una cantidad mayor a 0: "))
+    precio = float(input("Ingrese el precio: $"))
+    while not es_positivo(precio): #Comprobación de ingreso negativo
+        precio = float(input("Ingrese un precio mayor a 0: "))
+    categoria = input("Ingrese la categoria: ")
+
+    #Agregar todos los datos al diccionario producto
+    producto["Nombre"] = nombre
+    producto["Descripcion"] = descripcion
+    producto["Cantidad"] = cantidad
+    producto["Precio"] = precio
+    producto["Categoria"] = categoria
+
+    #El diccionario producto se define como valor de la clave codigo
+    inventario[codigo] = producto
+
+def mostrar_producto(producto):
+    print(f"Nombre      {producto["Nombre"]}")
+    print(f"Descripción {producto["Descripcion"]}")
+    print(f"Cantidad    {producto["Cantidad"]}")
+    print(f"Precio      ${producto["Precio"]}")
+    print(f"Categoria   {producto["Categoria"]}\n")
+
+def mostrar_productos():
+    for codigo, producto in inventario.items():
+        print(f"Código      {codigo}")
+        mostrar_producto(producto)
+    input("Presione enter para salir al menú")
+
+def actualizar_producto(inventario, codigo):
+    if codigo in inventario:
+        registrar_producto(inventario, codigo)# Reescribe un producto usando el codigo
+    else:
+        print("Código erróneo.\nVerifíquelo e ingréselo correctamente")
+
+def eliminar_producto(inventario):
+    codigo = int(input("Ingrese el código del producto que desea eliminar: "))
+    if codigo in inventario:
+        del inventario[codigo]
+        print("Producto eliminado con éxito")
+    else:
+        print("Código erróneo.\nVerifíquelo e ingréselo correctamente")
+
+def buscar_producto(codigo):
+    if codigo in inventario:
+        producto = inventario[codigo]
+        print("\nProducto encontrado: ")
+        mostrar_producto(producto)
+        input("Presione enter para salir al menú")
+    else:
+        print("Código erróneo.\nVerifíquelo e ingréselo correctamente")
+
+def registro_bajo_stock(limite_bajo_stock):
+    if es_positivo(limite_bajo_stock):
+        contador = 1
+        # Revisar cada producto del inventario
+        for producto in inventario.values():
+            if producto["Cantidad"] <= limite_bajo_stock:
+                mostrar_producto(producto)
+                contador += 1
+        if contador == 1:
+            print("\nNo hay productos con bajo stock")
+        input("Presione enter para salir al menú")
+    else:
+        print("Ingrese un número mayor a 0")
+
+inventario = {}
+codigo = 1
+while True:
+    menu()
+    opcion = int(input("\nIngrese una opción: "))
+    if opcion == 1:#Registrar producto
+        respuesta = "si" 
+        print("\nINGRESO DE PRODUCTO:\n")
+        while respuesta == "si":
+            registrar_producto(inventario, codigo)
+            codigo += 1
+            respuesta = input("\n¿Desea agregar otro producto?(si/no): ")
+    elif opcion == 2:#Mostrar productos
+        print("\n---Productos---")
+        mostrar_productos()
+    elif opcion == 3:#Actualizar producto
+        codigo_actualizar = int(input("\nIngrese el código del producto que desea actualizar: "))
+        actualizar_producto(inventario, codigo_actualizar)
+    elif opcion == 4:#Eliminar producto
+        eliminar_producto(inventario)
+    elif opcion == 5:#Buscar producto
+        codigo_buscar = int(input("\nIngrese el código del producto a buscar: "))
+        buscar_producto(codigo_buscar)
+    elif opcion == 6:#Registro de bajo stock
+        limite_bajo_stock = int(input("\nIngrese el límite de bajo stock: "))
+        registro_bajo_stock(limite_bajo_stock)
+    elif opcion == 7:#Saliendo
+        print("\nSaliendo...")
+        break
+    else:
+        print("\nIngrese una opción correcta (1-7)")
